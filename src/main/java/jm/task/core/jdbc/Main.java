@@ -1,6 +1,11 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.dao.UserDao;
+import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
+import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserServiceImpl;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,7 +20,19 @@ public class Main {
         System.out.println(userService.getAllUsers());
 
         userService.cleanUsersTable();
-        userService.dropUsersTable();// реализуйте алгоритм здесь
+        userService.dropUsersTable();
+
+        UserDao userDao = new UserDaoHibernateImpl();
+        userDao.createUsersTable();
+
+        userDao.saveUser("John", "Doe", (byte) 30);
+        userDao.saveUser("Jane", "Doe", (byte) 32);
+
+        List<User> users = userDao.getAllUsers();
+        users.forEach(user -> System.out.println(user.getName() + " " + user.getLastName()));
+
+        userDao.cleanUsersTable();
+        userDao.dropUsersTable();// реализуйте алгоритм здесь
     }
 }
 
